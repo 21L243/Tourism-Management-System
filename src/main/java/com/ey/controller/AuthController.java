@@ -15,6 +15,7 @@ import com.ey.dto.request.ForgotPasswordRequest;
 import com.ey.dto.request.LoginRequest;
 import com.ey.dto.request.RegisterRequest;
 import com.ey.dto.request.ResetPasswordRequest;
+import com.ey.dto.request.UpdateProfileRequest;
 import com.ey.dto.response.AccountDetailsResponse;
 import com.ey.dto.response.AuthResponse;
 import com.ey.dto.response.MessageResponse;
@@ -32,9 +33,10 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+
 	@Autowired
 	private AccountRepository accountRepository;
-
+	
 	@PostMapping("/register")
 	public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest req) {
 		return ResponseEntity.status(201).body(authService.register(req));
@@ -68,4 +70,28 @@ public class AuthController {
 		return ResponseEntity.ok(AccountMapper.toDetails(acc));
 	}
 
+	@PutMapping
+	public ResponseEntity<AccountDetailsResponse> updateCurrentUser(Authentication authentication,
+			@Valid @RequestBody UpdateProfileRequest req) {
+		String currentEmail = authentication.getName();
+
+		Account acc = accountRepository.findByEmail(currentEmail)
+				.orElseThrow(() -> new NotFoundException("Account not found"));
+
+		
+		if (!acc.getEmail().equalsIgnoreCase(req.getEmail())
+				&& accountRepository.existsByEmailAndIdNot(req.getEmail(), acc.getId())) {
+			
+			throw new com.ey.exception.BadRequestException("Email is already in use");
+		}
+
+		acc.setFullName(req.getFullName());
+		acc.setEmail(req.getEmail());
+		acc.setPhone(req.getPhone());
+
+		Account saved = accountRepository.save(acc);
+		return ResponseEntity.ok(AccountMapper.toDetails(saved));
+	}
+	
+	
 }

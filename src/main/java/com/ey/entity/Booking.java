@@ -4,7 +4,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+
 import com.ey.enums.BookingStatus;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -23,7 +27,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "bookings")
 public class Booking {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,6 +40,7 @@ public class Booking {
 
 	private LocalDate startDate;
 	private LocalDate endDate;
+
 	private int travellersCount;
 
 	@Enumerated(EnumType.STRING)
@@ -49,11 +54,14 @@ public class Booking {
 	private double subtotalAmount;
 	private double discountAmount;
 	private double totalAmount;
-	
+
 	@ManyToMany
 	@JoinTable(name = "booking_vouchers", joinColumns = @JoinColumn(name = "booking_id"), inverseJoinColumns = @JoinColumn(name = "voucher_id"))
 	private Set<Voucher> vouchers = new HashSet<>();
-	
+
+	@OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Traveller> travellers = new HashSet<>();
+
 	private Instant createdAt;
 	private Instant updatedAt;
 
@@ -171,6 +179,14 @@ public class Booking {
 		this.vouchers = vouchers;
 	}
 
+	public Set<Traveller> getTravellers() {
+		return travellers;
+	}
+
+	public void setTravellers(Set<Traveller> travellers) {
+		this.travellers = travellers;
+	}
+
 	public Instant getCreatedAt() {
 		return createdAt;
 	}
@@ -186,6 +202,5 @@ public class Booking {
 	public void setUpdatedAt(Instant updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
+
 }

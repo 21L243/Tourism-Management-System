@@ -3,6 +3,8 @@ package com.ey.entity;
 import java.time.Instant;
 import java.time.LocalDate;
 import com.ey.enums.DiscountType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +16,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Entity
 @Table(name = "vouchers")
 public class Voucher {
@@ -25,7 +28,6 @@ public class Voucher {
 	@Column(unique = true)
 	private String code;
 	
-	private String description;
 	
 	@Enumerated(EnumType.STRING)
 	private DiscountType discountType;
@@ -33,8 +35,6 @@ public class Voucher {
 	private double discountValue;
 	private LocalDate validFrom;
 	private LocalDate validUntil;
-	private Integer usageLimit;
-	private Integer usageCount;
 	private boolean isActive = true;
 	private Instant createdAt;
 	private Instant updatedAt;
@@ -65,13 +65,6 @@ public class Voucher {
 		this.code = code;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public DiscountType getDiscountType() {
 		return discountType;
@@ -105,21 +98,6 @@ public class Voucher {
 		this.validUntil = validUntil;
 	}
 
-	public Integer getUsageLimit() {
-		return usageLimit;
-	}
-
-	public void setUsageLimit(Integer usageLimit) {
-		this.usageLimit = usageLimit;
-	}
-
-	public Integer getUsageCount() {
-		return usageCount;
-	}
-
-	public void setUsageCount(Integer usageCount) {
-		this.usageCount = usageCount;
-	}
 
 	public boolean isActive() {
 		return isActive;

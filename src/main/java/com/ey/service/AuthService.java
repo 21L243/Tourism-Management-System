@@ -9,6 +9,7 @@ import com.ey.dto.response.AuthResponse;
 import com.ey.dto.response.MessageResponse;
 
 public interface AuthService {
+	
 	MessageResponse register(RegisterRequest req);
 
 	AuthResponse login(LoginRequest req);

@@ -2,7 +2,10 @@ package com.ey.entity;
 
 import java.time.Instant;
 import java.util.List;
+
 import com.ey.enums.AgeEligibility;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -17,6 +20,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
+
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Entity
 @Table(name = "tour_packages")
 public class TourPackage {
