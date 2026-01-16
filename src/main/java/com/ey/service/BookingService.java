@@ -17,7 +17,6 @@ public interface BookingService {
 
 	List<Booking> listByAccount(Long accountId);
 
-
 	Traveller addTraveller(Long bookingId, TravellerRequest req);
 
 	List<Traveller> listTravellers(Long bookingId);
@@ -27,5 +26,7 @@ public interface BookingService {
 	ResponseEntity<?> deleteTraveller(Long bookingId, Long travellerId);
 
 	Traveller updateTraveller(Long bookingId, Long travellerId, @Valid TravellerRequest req);
+
+	Booking assignGuide(Long bookingId, Long guideId);
 
 }

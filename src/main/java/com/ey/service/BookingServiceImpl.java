@@ -12,15 +12,18 @@ import com.ey.dto.request.BookingRequest;
 import com.ey.dto.request.TravellerRequest;
 import com.ey.entity.Account;
 import com.ey.entity.Booking;
+import com.ey.entity.Guide;
 import com.ey.entity.TourPackage;
 import com.ey.entity.Traveller;
 import com.ey.entity.Voucher;
+import com.ey.enums.AvailabilityStatus;
 import com.ey.enums.BookingStatus;
 import com.ey.exception.BadRequestException;
 import com.ey.exception.ConflictException;
 import com.ey.exception.NotFoundException;
 import com.ey.repository.AccountRepository;
 import com.ey.repository.BookingRepository;
+import com.ey.repository.GuideRepository;
 import com.ey.repository.TourPackageRepository;
 import com.ey.repository.TravellerRepository;
 import com.ey.repository.VoucherRepository;
@@ -38,6 +41,8 @@ public class BookingServiceImpl implements BookingService {
 	private TravellerRepository travellerRepository;
 	@Autowired
 	private VoucherRepository voucherRepository;
+	@Autowired
+	private GuideRepository guideRepository;
 
 	@Override
 	public Booking create(BookingRequest req) {
@@ -89,29 +94,26 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-    public Traveller updateTraveller(Long bookingId, Long travellerId, TravellerRequest req) {
-         bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException("Booking not found"));
+	public Traveller updateTraveller(Long bookingId, Long travellerId, TravellerRequest req) {
+		bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking not found"));
 
-        Traveller t = travellerRepository.findById(travellerId)
-                .orElseThrow(() -> new NotFoundException("Traveller not found"));
+		Traveller t = travellerRepository.findById(travellerId)
+				.orElseThrow(() -> new NotFoundException("Traveller not found"));
 
-       
-        if (t.getBooking() == null || !t.getBooking().getId().equals(bookingId)) {
-            throw new BadRequestException("Traveller does not belong to the booking");
-        }
+		if (t.getBooking() == null || !t.getBooking().getId().equals(bookingId)) {
+			throw new BadRequestException("Traveller does not belong to the booking");
+		}
 
-      
-        t.setFullName(req.getFullName());
-        t.setAge(req.getAge());
-        t.setGender(req.getGender());
-        t.setRelationship(req.getRelationship());
-        t.setSpecialRequirements(req.getSpecialRequirements());
+		t.setFullName(req.getFullName());
+		t.setAge(req.getAge());
+		t.setGender(req.getGender());
+		t.setRelationship(req.getRelationship());
+		t.setSpecialRequirements(req.getSpecialRequirements());
 
-        Traveller saved = travellerRepository.save(t);       
+		Traveller saved = travellerRepository.save(t);
 
-        return saved;
-    }
+		return saved;
+	}
 
 	@Override
 	public Traveller addTraveller(Long bookingId, TravellerRequest req) {
@@ -182,7 +184,7 @@ public class BookingServiceImpl implements BookingService {
 
 		bookingRepository.save(b);
 
-		return ResponseEntity.ok("Deleted "+travellerId+" successfully");
+		return ResponseEntity.ok("Deleted " + travellerId + " successfully");
 
 	}
 
@@ -222,6 +224,26 @@ public class BookingServiceImpl implements BookingService {
 		b.setDiscountAmount(discount);
 		b.setTotalAmount(b.getSubtotalAmount() - discount);
 
+		return bookingRepository.save(b);
+	}
+
+	@Override
+
+	public Booking assignGuide(Long bookingId, Long guideId) {
+		Booking b = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking not found"));
+		Guide g = guideRepository.findById(guideId).orElseThrow(() -> new NotFoundException("Guide not found"));
+
+		if (b.getStartDate() == null || b.getEndDate() == null) {
+			throw new BadRequestException("Booking must have startDate and endDate before assigning a guide");
+		}
+
+		
+		if (!g.isActive()) throw new BadRequestException("Guide is not active");
+		 if (g.getAvailabilityStatus() == AvailabilityStatus.BUSY)
+		throw new ConflictException("Guide is busy");
+
+		b.setGuide(g);
+		b.setGuideRequested(true);
 		return bookingRepository.save(b);
 	}
 

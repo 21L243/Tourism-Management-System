@@ -64,6 +64,14 @@ public class BookingController {
 	    bookingService.applyVoucher(id, req.getCode());
 		return ResponseEntity.ok("Applied voucher");
 	}
+	
+
+@PutMapping("/{bookingId}/guide/{guideId}")
+    public ResponseEntity<?> assignGuide(@PathVariable Long bookingId, @PathVariable Long guideId) {
+        bookingService.assignGuide(bookingId, guideId);
+        return ResponseEntity.ok("Guide Added");
+    }
+
 
 	@DeleteMapping("/{bookingId}/travellers/{travellerId}")
 	public ResponseEntity<?> deleteTraveller(@PathVariable Long bookingId, @PathVariable Long travellerId) {
