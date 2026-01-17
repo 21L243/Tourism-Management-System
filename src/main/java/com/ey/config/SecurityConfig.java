@@ -61,7 +61,8 @@ public class SecurityConfig {
 						sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(
 						auth -> auth.requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
-								.requestMatchers("/api/v1/auth/forgot-password", "/api/v1/auth/reset-password").permitAll()
+								.requestMatchers("/api/v1/auth/forgot-password", "/api/v1/auth/reset-password")
+								.permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/destinations/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/packages/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/trip-plans/**").permitAll()

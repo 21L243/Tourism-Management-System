@@ -237,10 +237,10 @@ public class BookingServiceImpl implements BookingService {
 			throw new BadRequestException("Booking must have startDate and endDate before assigning a guide");
 		}
 
-		
-		if (!g.isActive()) throw new BadRequestException("Guide is not active");
-		 if (g.getAvailabilityStatus() == AvailabilityStatus.BUSY)
-		throw new ConflictException("Guide is busy");
+		if (!g.isActive())
+			throw new BadRequestException("Guide is not active");
+		if (g.getAvailabilityStatus() == AvailabilityStatus.BUSY)
+			throw new ConflictException("Guide is busy");
 
 		b.setGuide(g);
 		b.setGuideRequested(true);

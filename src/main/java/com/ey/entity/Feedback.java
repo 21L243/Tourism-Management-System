@@ -1,6 +1,10 @@
 package com.ey.entity;
 
 import java.time.Instant;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,27 +14,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Entity
 @Table(name = "feedback")
 public class Feedback {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 9001)
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Booking booking;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Account account;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Destination destination;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	private TourPackage tourPackage;
 	
 	private int rating;
 	
@@ -73,22 +76,6 @@ public class Feedback {
 
 	public void setAccount(Account account) {
 		this.account = account;
-	}
-
-	public Destination getDestination() {
-		return destination;
-	}
-
-	public void setDestination(Destination destination) {
-		this.destination = destination;
-	}
-
-	public TourPackage getTourPackage() {
-		return tourPackage;
-	}
-
-	public void setTourPackage(TourPackage tourPackage) {
-		this.tourPackage = tourPackage;
 	}
 
 	public int getRating() {

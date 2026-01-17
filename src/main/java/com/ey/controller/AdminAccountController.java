@@ -30,4 +30,5 @@ public class AdminAccountController {
 	public AccountDetailsResponse getAccountById(@PathVariable Long id) {
 		return adminAccountService.getAccountById(id);
 	}
+
 }

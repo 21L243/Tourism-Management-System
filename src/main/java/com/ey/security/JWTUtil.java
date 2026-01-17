@@ -61,7 +61,6 @@ public class JWTUtil {
         return getClaim(token, Claims::getSubject);
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> extractRoles(String token) {
         Object roles = getAllClaims(token).get("roles");
         if (roles instanceof List<?> list) {

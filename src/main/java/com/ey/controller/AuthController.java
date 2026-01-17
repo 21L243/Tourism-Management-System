@@ -20,6 +20,7 @@ import com.ey.dto.response.AccountDetailsResponse;
 import com.ey.dto.response.AuthResponse;
 import com.ey.dto.response.MessageResponse;
 import com.ey.entity.Account;
+import com.ey.exception.BadRequestException;
 import com.ey.exception.NotFoundException;
 import com.ey.mapper.AccountMapper;
 import com.ey.repository.AccountRepository;
@@ -36,7 +37,7 @@ public class AuthController {
 
 	@Autowired
 	private AccountRepository accountRepository;
-	
+
 	@PostMapping("/register")
 	public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest req) {
 		return ResponseEntity.status(201).body(authService.register(req));
@@ -78,11 +79,10 @@ public class AuthController {
 		Account acc = accountRepository.findByEmail(currentEmail)
 				.orElseThrow(() -> new NotFoundException("Account not found"));
 
-		
 		if (!acc.getEmail().equalsIgnoreCase(req.getEmail())
 				&& accountRepository.existsByEmailAndIdNot(req.getEmail(), acc.getId())) {
-			
-			throw new com.ey.exception.BadRequestException("Email is already in use");
+
+			throw new BadRequestException("Email is already in use");
 		}
 
 		acc.setFullName(req.getFullName());
@@ -92,6 +92,26 @@ public class AuthController {
 		Account saved = accountRepository.save(acc);
 		return ResponseEntity.ok(AccountMapper.toDetails(saved));
 	}
-	
-	
+
+	@PutMapping("/deactivate")
+	public ResponseEntity<MessageResponse> deactivateCurrentUser(Authentication authentication) {
+		if (authentication == null || !authentication.isAuthenticated()) {
+			return ResponseEntity.status(401).body(new MessageResponse("Unauthorized"));
+		}
+
+		String email = authentication.getName();
+
+		Account acc = accountRepository.findByEmail(email)
+				.orElseThrow(() -> new NotFoundException("Account not found"));
+
+		if (!acc.isActive()) {
+			return ResponseEntity.ok(new MessageResponse("Account is already deactivated"));
+		}
+
+		acc.setActive(false);
+		accountRepository.save(acc);
+
+		return ResponseEntity.ok(new MessageResponse("Account deactivated successfully"));
+	}
+
 }

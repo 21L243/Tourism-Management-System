@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -24,7 +25,8 @@ import jakarta.persistence.Table;
 public class Payment {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 8001)
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

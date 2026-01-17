@@ -32,4 +32,10 @@ public class AdminAccountServiceImpl implements AdminAccountService {
 
 	}
 
+	public void deleteAccountById(Long id) {
+		Account acc = accountRepository.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
+
+		accountRepository.delete(acc);
+	}
+
 }

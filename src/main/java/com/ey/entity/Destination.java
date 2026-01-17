@@ -13,30 +13,32 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 @Table(name = "destinations")
 public class Destination {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 1001)
 	private Long id;
-	
+
 	private String name;
 	private String country;
 	private String city;
-	
+
 	@Column(length = 2000)
 	private String description;
-	
+
 	@ElementCollection
 	private List<String> highlights;
-	
+
 	@ElementCollection
 	private List<String> images;
-	
+
 	private boolean isActive = true;
 	private Instant createdAt;
 	private Instant updatedAt;
@@ -130,6 +132,5 @@ public class Destination {
 	public void setUpdatedAt(Instant updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
+
 }

@@ -10,4 +10,6 @@ public interface AdminAccountService {
 
 	AccountDetailsResponse getAccountById(Long id);
 
+	void deleteAccountById(Long id);
+
 }

@@ -1,6 +1,6 @@
 package com.ey.service;
 
-import com.ey.dto.request.VoucherCreateRequest;
+import com.ey.dto.request.VoucherRequest;
 import com.ey.entity.Voucher;
 
 import jakarta.validation.Valid;
@@ -18,5 +18,7 @@ public interface VoucherService {
 
     ResponseEntity<?> delete(Long id);
 
-	Voucher create(@Valid VoucherCreateRequest req);
+	Voucher create(@Valid VoucherRequest req);
+
+	Voucher update(Long voucherId, @Valid VoucherRequest req);
 }
