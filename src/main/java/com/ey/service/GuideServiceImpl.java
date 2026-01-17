@@ -2,6 +2,8 @@ package com.ey.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,8 @@ public class GuideServiceImpl implements GuideService {
 
 	@Autowired
 	private  GuideRepository guideRepository;
-
+	
+	Logger logger = LoggerFactory.getLogger(GuideServiceImpl.class);
 
 	@Override
 	public Guide create(GuideRequest req) {
@@ -28,7 +31,8 @@ public class GuideServiceImpl implements GuideService {
 		g.setLanguages(req.getLanguages());
 		g.setActive(req.isActive());
 		g.setAvailabilityStatus(req.getAvailabilityStatus());
-
+		
+		logger.info("Guide created successfully");
 		return guideRepository.save(g);
 	}
 
@@ -46,16 +50,19 @@ public class GuideServiceImpl implements GuideService {
 		g.setLanguages(req.getLanguages());
 		g.setActive(req.isActive());
 		g.setAvailabilityStatus(req.getAvailabilityStatus());
-
+		
+		logger.info("Guide updated successfully");
 		return guideRepository.save(g);
 	}
 
 	@Override
 	public ResponseEntity<?> delete(Long id) {
 		if (!guideRepository.existsById(id)) {
+			logger.warn("Guide not found");
 			throw new NotFoundException("Guide not found");
 		}
 		guideRepository.deleteById(id);
+		logger.info("Deleted guide id "+id+" successfully");
 		return ResponseEntity.ok("Deleted guide id "+id+" successfully");
 	}
 }

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,8 @@ public class BookingServiceImpl implements BookingService {
 	@Autowired
 	private GuideRepository guideRepository;
 
+	Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+
 	@Override
 	public Booking create(BookingRequest req) {
 		Account acc = accountRepository.findById(req.getAccountId())
@@ -56,12 +60,15 @@ public class BookingServiceImpl implements BookingService {
 		LocalDate end = req.getEndDate();
 
 		if (end.isBefore(start)) {
+			logger.warn("endDate must be after startDate");
 			throw new BadRequestException("endDate must be after startDate");
 		}
 		if (req.getTravellersCount() <= 0) {
+			logger.warn("travellersCount must be > 0");
 			throw new BadRequestException("travellersCount must be > 0");
 		}
 		if (req.getTravellersCount() > tp.getCapacity()) {
+			logger.warn("Capacity full");
 			throw new ConflictException("Capacity full");
 		}
 
@@ -82,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
 		if (booking.getVouchers() == null) {
 			booking.setVouchers(new HashSet<Voucher>());
 		}
-
+        logger.info("Booking created successfuly");
 		return bookingRepository.save(booking);
 	}
 
@@ -90,6 +97,7 @@ public class BookingServiceImpl implements BookingService {
 	public List<Booking> listByAccount(Long accountId) {
 		Account acc = accountRepository.findById(accountId)
 				.orElseThrow(() -> new NotFoundException("Account not found"));
+		logger.info("Accounts list: "+acc);
 		return bookingRepository.findByAccount(acc);
 	}
 
@@ -101,6 +109,7 @@ public class BookingServiceImpl implements BookingService {
 				.orElseThrow(() -> new NotFoundException("Traveller not found"));
 
 		if (t.getBooking() == null || !t.getBooking().getId().equals(bookingId)) {
+			logger.warn("Traveller does not belong to the booking");
 			throw new BadRequestException("Traveller does not belong to the booking");
 		}
 
@@ -111,7 +120,7 @@ public class BookingServiceImpl implements BookingService {
 		t.setSpecialRequirements(req.getSpecialRequirements());
 
 		Traveller saved = travellerRepository.save(t);
-
+        logger.info("Traveller updated successfully");
 		return saved;
 	}
 
@@ -122,6 +131,7 @@ public class BookingServiceImpl implements BookingService {
 		int currentCount = b.getTravellersCount();
 		int capacity = b.getTourPackage().getCapacity();
 		if (currentCount + 1 > capacity) {
+			logger.warn("Capacity full");
 			throw new ConflictException("Capacity full");
 		}
 
@@ -149,7 +159,7 @@ public class BookingServiceImpl implements BookingService {
 		b.setTotalAmount(subtotal - discount);
 
 		bookingRepository.save(b);
-
+		logger.info("Traveller added");
 		return saved;
 	}
 
@@ -161,6 +171,7 @@ public class BookingServiceImpl implements BookingService {
 				.orElseThrow(() -> new NotFoundException("Traveller not found"));
 
 		if (t.getBooking() == null || !t.getBooking().getId().equals(bookingId)) {
+			logger.warn("Traveller does not belong to the booking");
 			throw new BadRequestException("Traveller does not belong to the booking");
 		}
 
@@ -183,7 +194,7 @@ public class BookingServiceImpl implements BookingService {
 		b.setTotalAmount(newSubtotal - discount);
 
 		bookingRepository.save(b);
-
+		logger.info("Deleted " + travellerId + "  Successfully");
 		return ResponseEntity.ok("Deleted " + travellerId + " successfully");
 
 	}
@@ -191,7 +202,7 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public List<Traveller> listTravellers(Long bookingId) {
 		Booking b = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking not found"));
-
+		logger.info("Travellers list: " + b);
 		return travellerRepository.findByBooking(b);
 	}
 
@@ -202,6 +213,7 @@ public class BookingServiceImpl implements BookingService {
 		Voucher v = voucherRepository.findByCode(code).orElseThrow(() -> new BadRequestException("Voucher invalid"));
 
 		if (!v.isActive()) {
+			logger.warn("Voucher inactive");
 			throw new BadRequestException("Voucher inactive");
 		}
 
@@ -223,27 +235,32 @@ public class BookingServiceImpl implements BookingService {
 
 		b.setDiscountAmount(discount);
 		b.setTotalAmount(b.getSubtotalAmount() - discount);
+		logger.info("Voucher applied");
 
 		return bookingRepository.save(b);
 	}
 
 	@Override
-
 	public Booking assignGuide(Long bookingId, Long guideId) {
 		Booking b = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking not found"));
 		Guide g = guideRepository.findById(guideId).orElseThrow(() -> new NotFoundException("Guide not found"));
 
 		if (b.getStartDate() == null || b.getEndDate() == null) {
+			logger.warn("Booking must have startDate and endDate before assigning a guide");
 			throw new BadRequestException("Booking must have startDate and endDate before assigning a guide");
 		}
 
-		if (!g.isActive())
+		if (!g.isActive()) {
+			logger.warn("Guide is not active");
 			throw new BadRequestException("Guide is not active");
-		if (g.getAvailabilityStatus() == AvailabilityStatus.BUSY)
+		}
+		if (g.getAvailabilityStatus() == AvailabilityStatus.BUSY) {
+			logger.warn("Guide is busy");
 			throw new ConflictException("Guide is busy");
-
+		}
 		b.setGuide(g);
 		b.setGuideRequested(true);
+		logger.info("Guide assigned successfully");
 		return bookingRepository.save(b);
 	}
 

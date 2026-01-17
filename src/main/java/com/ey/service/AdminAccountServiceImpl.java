@@ -2,6 +2,8 @@ package com.ey.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class AdminAccountServiceImpl implements AdminAccountService {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	Logger logger = LoggerFactory.getLogger(AdminAccountServiceImpl.class);
+
 
 	@Override
 	public AccountDetailsResponse getAccountById(Long id) {
@@ -36,6 +41,7 @@ public class AdminAccountServiceImpl implements AdminAccountService {
 		Account acc = accountRepository.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
 
 		accountRepository.delete(acc);
+		logger.info("Account deleted successfully");
 	}
 
 }

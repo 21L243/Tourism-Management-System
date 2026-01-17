@@ -4,12 +4,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 import com.ey.dto.request.ChangePasswordRequest;
 import com.ey.dto.request.ForgotPasswordRequest;
@@ -42,9 +43,12 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	private PasswordResetTokenRepository prtRepository;
 
+	Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+
 	@Override
 	public MessageResponse register(RegisterRequest req) {
 		if (accountRepository.existsByEmail(req.getEmail())) {
+			logger.warn("Email already exists");
 			throw new ConflictException("Email already exists");
 		}
 
@@ -55,25 +59,25 @@ public class AuthServiceImpl implements AuthService {
 			throw new BadRequestException("Invalid role: " + req.getRole());
 		}
 
-
 		Account acc = new Account();
 		acc.setFullName(req.getFullName());
 		acc.setEmail(req.getEmail());
 		acc.setPasswordHash(passwordEncoder.encode(req.getPassword()));
 		acc.setPhone(req.getPhone());
 		acc.setRole(role);
-		acc.setActive(true); 
+		acc.setActive(true);
 
 		accountRepository.save(acc);
-
+		logger.info("Registered successfully");
 		return new MessageResponse("Registered successfully");
 	}
 
 	@Override
 	public AuthResponse login(LoginRequest req) {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword()));
-		
+
 		String token = jwtUtil.generateToken(req.getEmail());
+		logger.info("Login success");
 		return new AuthResponse(token);
 	}
 
@@ -88,6 +92,7 @@ public class AuthServiceImpl implements AuthService {
 		acc.setPasswordHash(passwordEncoder.encode(req.getNewPassword()));
 		accountRepository.save(acc);
 
+		logger.info("Password changed successfully");
 		return new MessageResponse("Password changed successfully");
 	}
 
@@ -98,7 +103,6 @@ public class AuthServiceImpl implements AuthService {
 
 		String token = UUID.randomUUID().toString();
 
-		
 		PasswordResetToken prt = new PasswordResetToken();
 		prt.setToken(token);
 		prt.setAccount(acc);
@@ -107,7 +111,6 @@ public class AuthServiceImpl implements AuthService {
 
 		prtRepository.save(prt);
 
-		
 		return new MessageResponse("Use token: " + token);
 	}
 
@@ -132,6 +135,8 @@ public class AuthServiceImpl implements AuthService {
 		accountRepository.save(acc);
 		prtRepository.save(prt);
 
-		return new MessageResponse("Password has been reset successfully.");
+		logger.info("Password has been reset successfully");
+
+		return new MessageResponse("Password has been reset successfully");
 	}
 }
