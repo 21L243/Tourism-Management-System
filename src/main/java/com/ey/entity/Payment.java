@@ -25,8 +25,8 @@ import jakarta.persistence.Table;
 public class Payment {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 8001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence5")
+	@SequenceGenerator(name = "sequence5", sequenceName = "sequence5", allocationSize = 1, initialValue = 8001)
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

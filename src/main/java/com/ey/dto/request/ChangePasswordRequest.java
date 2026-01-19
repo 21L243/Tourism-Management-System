@@ -7,13 +7,13 @@ import jakarta.validation.constraints.Size;
 public class ChangePasswordRequest {
 	
 	@Email
-	@NotBlank
+	@NotBlank(message="email is required")
 	private String email;
 	
-	@NotBlank
+	@NotBlank(message="currentPassword is required")
 	private String currentPassword;
 	
-	@NotBlank
+	@NotBlank(message="newPassword is required")
 	@Size(min = 8)
 	private String newPassword;
 

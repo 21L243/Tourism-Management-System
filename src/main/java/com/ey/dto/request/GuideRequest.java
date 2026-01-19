@@ -9,15 +9,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class GuideRequest {
-	@NotBlank
+	@NotBlank(message="fullName is required")
 	private String fullName;
-	@NotNull
+	@NotNull(message="languages is required")
 	private List<String> languages;
 	@Min(0)
 	private int yearsOfExperience;
-	@NotNull
+	@NotNull(message="status is required")
 	private AvailabilityStatus availabilityStatus;
-	@NotBlank
+	@NotBlank(message="Phone number is required")
 	private String contactPhone;
 	private boolean isActive = true;
 	public String getFullName() {

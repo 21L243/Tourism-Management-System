@@ -22,8 +22,8 @@ import jakarta.persistence.Table;
 public class Destination {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 1001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence2")
+	@SequenceGenerator(name = "sequence2", sequenceName = "sequence2", allocationSize = 1, initialValue = 1001)
 	private Long id;
 
 	private String name;

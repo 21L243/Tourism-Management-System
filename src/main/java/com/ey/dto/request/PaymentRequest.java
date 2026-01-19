@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class PaymentRequest {
-	@NotNull
+	@NotNull(message="bookingId is required")
 	private Long bookingId;
-	@NotBlank
+	@NotBlank(message="provider is required")
 	private String provider;
-	@Positive
+	@Positive(message="amount > 0")
 	private double amount;
 	public Long getBookingId() {
 		return bookingId;

@@ -1,6 +1,6 @@
 package com.ey.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,13 +32,12 @@ public class TripPlanController {
 	}
 
 	@GetMapping
-	public List<TripPlan> list(@PathVariable Long packageId) {
-		return tripPlanService.listForPackage(packageId);
+	public ResponseEntity<Map<String, Object>> getPlanswithPackageandDestination(@PathVariable Long packageId) {
+		return ResponseEntity.ok(tripPlanService.listForPackage(packageId)); 
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<TripPlan> getById(@PathVariable("packageId") Long packageId,
-			@PathVariable("id") Long id) {
+	public ResponseEntity<TripPlan> getById(@PathVariable("packageId") Long packageId, @PathVariable("id") Long id) {
 		var plan = tripPlanService.getById(packageId, id);
 		return ResponseEntity.ok(plan);
 	}

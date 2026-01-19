@@ -14,6 +14,8 @@ import com.ey.entity.Destination;
 import com.ey.exception.NotFoundException;
 import com.ey.repository.DestinationRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class DestinationServiceImpl implements DestinationService {
 
@@ -62,7 +64,7 @@ public class DestinationServiceImpl implements DestinationService {
 
 	public Destination getByName(String name) {
 		return destinationRepository.findByNameIgnoreCase(name).stream().findFirst()
-				.orElseThrow(() -> new NotFoundException("Destination not found"));
+				.orElseThrow(() -> new NotFoundException("Destination name " + name + " not found"));
 	}
 
 	public List<Destination> getByCity(String city) {
@@ -78,7 +80,7 @@ public class DestinationServiceImpl implements DestinationService {
 
 	public List<Destination> getByCountry(String country) {
 
-		List<Destination> destinations = destinationRepository.findByCityIgnoreCase(country);
+		List<Destination> destinations = destinationRepository.findByCountryIgnoreCase(country);
 		if (destinations.isEmpty()) {
 			logger.warn("Destination country not found: " + country);
 			throw new NotFoundException("Destination country not found: " + country);
@@ -111,6 +113,7 @@ public class DestinationServiceImpl implements DestinationService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<?> deleteByIsActive(boolean status) {
 		long count = destinationRepository.countByIsActive(status);
 		if (count == 0) {

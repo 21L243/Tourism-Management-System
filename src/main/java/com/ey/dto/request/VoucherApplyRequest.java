@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class VoucherApplyRequest {
 	
-	@NotBlank
+	@NotBlank(message="code is required")
 	private String code;
 
 	public String getCode() {

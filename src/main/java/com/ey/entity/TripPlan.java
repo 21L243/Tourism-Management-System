@@ -22,8 +22,8 @@ import jakarta.persistence.Table;
 public class TripPlan {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 3001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence8")
+	@SequenceGenerator(name = "sequence8", sequenceName = "sequence8", allocationSize = 1, initialValue = 3001)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -4,45 +4,54 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class TravellerRequest {
-	@NotBlank
+	@NotBlank(message = "fullName is required")
 	private String fullName;
 	@Min(0)
 	private int age;
-	@NotBlank
+	@NotBlank(message = "gender is required")
 	private String gender;
-	@NotBlank
+	@NotBlank(message = "relationship required")
 	private String relationship;
 	private String specialRequirements;
+
 	public String getFullName() {
 		return fullName;
 	}
+
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
+
 	public int getAge() {
 		return age;
 	}
+
 	public void setAge(int age) {
 		this.age = age;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	public String getRelationship() {
 		return relationship;
 	}
+
 	public void setRelationship(String relationship) {
 		this.relationship = relationship;
 	}
+
 	public String getSpecialRequirements() {
 		return specialRequirements;
 	}
+
 	public void setSpecialRequirements(String specialRequirements) {
 		this.specialRequirements = specialRequirements;
 	}
-	
-	
+
 }

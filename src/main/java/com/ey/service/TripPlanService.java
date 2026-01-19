@@ -1,6 +1,6 @@
 package com.ey.service;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
@@ -11,7 +11,7 @@ public interface TripPlanService {
 	
 	TripPlan addToPackage(Long packageId, TripPlanRequest req);
 
-	List<TripPlan> listForPackage(Long packageId);
+	Map<String, Object> listForPackage(Long packageId);
 
 	TripPlan update(Long packageId, Long id, TripPlanRequest req);
 

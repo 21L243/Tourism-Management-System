@@ -28,8 +28,8 @@ import jakarta.persistence.Table;
 public class TourPackage {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 2001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence6")
+	@SequenceGenerator(name = "sequence6", sequenceName = "sequence6", allocationSize = 1, initialValue = 2001)
 	private Long id;
 	
 	private String title;

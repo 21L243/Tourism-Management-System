@@ -23,8 +23,8 @@ import jakarta.persistence.Table;
 public class Traveller {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 5001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence7")
+	@SequenceGenerator(name = "sequence7", sequenceName = "sequence7", allocationSize = 1, initialValue = 5001)
 	private Long id;
 
 	@JsonIgnore

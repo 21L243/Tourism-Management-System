@@ -67,7 +67,7 @@ public class SecurityConfig {
 								.requestMatchers(HttpMethod.GET, "/api/v1/packages/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/trip-plans/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/guides/**").permitAll()
-								.requestMatchers("/api/v1/auth/change-password").permitAll()
+								.requestMatchers("/api/v1/auth/change-password").authenticated()
 								.requestMatchers("/api/v1/bookings/**", "/api/v1/payments/**", "/api/v1/feedback/**",
 										"/api/v1/vouchers/**", "/api/v1/user/**")
 								.hasAnyRole("USER", "ADMIN")

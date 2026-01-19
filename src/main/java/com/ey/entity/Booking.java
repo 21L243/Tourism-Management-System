@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.ey.enums.BookingStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,11 +31,12 @@ import jakarta.persistence.Table;
 public class Booking {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 4001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence1")
+	@SequenceGenerator(name = "sequence1", sequenceName = "sequence1", allocationSize = 1, initialValue = 4001)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({"passwordHash", "role","createdAt","updatedAt","active"})
 	private Account account;
 
 	@ManyToOne(fetch = FetchType.LAZY)

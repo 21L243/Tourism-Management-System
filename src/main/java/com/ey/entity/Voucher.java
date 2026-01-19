@@ -23,8 +23,8 @@ import jakarta.persistence.Table;
 public class Voucher {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 6001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence9")
+	@SequenceGenerator(name = "sequence9", sequenceName = "sequence9", allocationSize = 1, initialValue = 6001)
 	private Long id;
 	
 	@Column(unique = true)

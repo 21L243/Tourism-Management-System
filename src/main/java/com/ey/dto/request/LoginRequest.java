@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 public class LoginRequest {
 	
 	@Email
-	@NotBlank
+	@NotBlank(message="email is required")
 	private String email;
 	
-	@NotBlank
+	@NotBlank(message="password is required")
 	private String password;
 
 	public String getEmail() {

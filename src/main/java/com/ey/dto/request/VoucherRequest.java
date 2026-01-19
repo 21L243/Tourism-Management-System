@@ -11,14 +11,14 @@ import jakarta.validation.constraints.Size;
 
 public class VoucherRequest {
 
-	@NotBlank
+	@NotBlank(message="code is required")
 	@Size(max = 64)
 	private String code;
 
-	@NotNull
+	@NotNull(message="discountType is required")
 	private DiscountType discountType; 
 
-	@NotNull
+	@NotNull(message="discountValue is required")
 	@Positive
 	private Double discountValue;
 

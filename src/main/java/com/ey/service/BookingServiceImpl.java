@@ -45,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
 	private VoucherRepository voucherRepository;
 	@Autowired
 	private GuideRepository guideRepository;
-
+	
 	Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
 
 	@Override
@@ -146,7 +146,7 @@ public class BookingServiceImpl implements BookingService {
 
 		Traveller saved = travellerRepository.save(t);
 
-		b.setTravellersCount(currentCount + 1);
+		b.setTravellersCount(b.getTravellers().size());
 		double base = b.getTourPackage().getBasePrice();
 		double subtotal = base * b.getTravellersCount();
 		b.setSubtotalAmount(subtotal);

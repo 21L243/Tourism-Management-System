@@ -8,18 +8,18 @@ import jakarta.validation.constraints.Positive;
 
 public class BookingRequest {
 
-	@NotNull
+	@NotNull(message="accountId is required")
 	@Positive(message = "accountId must be positive")
 	private Long accountId;
 
-	@NotNull
+	@NotNull(message="tourPackageId is required")
 	@Positive(message = "tourPackageId must be positive")
 	private Long tourPackageId;
 
-	@NotNull
+	@NotNull(message="startDate is required")
 	private LocalDate startDate; 
 
-	@NotNull
+	@NotNull(message="endDate is required")
 	private LocalDate endDate; 
 
 	@Min(value = 1, message = "travellersCount must be at least 1")

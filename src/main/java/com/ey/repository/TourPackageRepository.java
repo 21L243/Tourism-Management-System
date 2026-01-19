@@ -19,4 +19,6 @@ public interface TourPackageRepository extends JpaRepository<TourPackage, Long> 
 	@EntityGraph(attributePaths = { "destination" })
 	List<TourPackage> findByDurationDays(int durationDays);
 
+	List<TourPackage> findByDestination_CountryIgnoreCase(String cn);
+
 }

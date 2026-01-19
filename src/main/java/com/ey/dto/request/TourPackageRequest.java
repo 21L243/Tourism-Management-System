@@ -7,23 +7,23 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class TourPackageRequest {
-	@NotBlank
+	@NotBlank(message="title is required")
 	private String title;
-	@NotNull
+	@NotNull(message="destinationId is required")
 	private Long destinationId;
-	@NotBlank
+	@NotBlank(message="description is required")
 	private String description;
 	@Positive
 	private int durationDays;
 	@Positive
 	private double basePrice;
-	@Positive
+	@Positive(message="capacity>0")
 	private int capacity;
-	@NotNull
+	@NotNull(message="includes required")
 	private List<String> includes;
-	@NotNull
+	@NotNull(message="excludes required")
 	private List<String> excludes;
-	@NotBlank
+	@NotBlank(message="ageEligibility required")
 	private String ageEligibility;
 	private boolean isActive = true;
 	public String getTitle() {

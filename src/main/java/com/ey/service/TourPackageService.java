@@ -24,4 +24,6 @@ public interface TourPackageService {
 	List<TourPackage> getByDurationDays(int duration);
 
 	List<TourPackage> getByAgeEligibility(String eligibility);
+
+	List<TourPackage> getByDestinationCountry(String dcountry);
 }

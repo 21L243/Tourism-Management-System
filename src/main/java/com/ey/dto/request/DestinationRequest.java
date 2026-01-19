@@ -7,18 +7,19 @@ import jakarta.validation.constraints.NotNull;
 
 public class DestinationRequest {
 	
-	@NotBlank
+	@NotBlank(message="name is required")
 	private String name;
-	@NotBlank
+	@NotBlank(message="country is required")
 	private String country;
-	@NotBlank
+	@NotBlank(message="city is required")
 	private String city;
-	@NotBlank
+	@NotBlank(message="description is required")
 	private String description;
-	@NotNull
+	@NotNull(message="highlights is required")
 	private List<String> highlights;
-	@NotNull
+	@NotNull(message="images required")
 	private List<String> images;
+	
 	private boolean isActive = true;
 
 	public String getName() {

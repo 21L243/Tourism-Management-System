@@ -23,8 +23,8 @@ import jakarta.persistence.Table;
 public class Feedback {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 9001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence3")
+	@SequenceGenerator(name = "sequence3", sequenceName = "sequence3", allocationSize = 1, initialValue = 9001)
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

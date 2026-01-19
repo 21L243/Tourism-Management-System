@@ -82,6 +82,22 @@ public class TourPackageServiceImpl implements TourPackageService {
 	}
 
 	@Override
+	public List<TourPackage> getByDestinationCountry(String country) {
+		if (country == null || country.isBlank()) {
+			throw new IllegalArgumentException("country is required");
+		}
+		String cn = country.trim();
+
+		List<TourPackage> results = tourPackageRepository.findByDestination_CountryIgnoreCase(cn);
+
+		if (results == null || results.isEmpty()) {
+			logger.warn("No tour packages found for country : " + cn);
+			throw new NotFoundException("No tour packages found for country : " + cn);
+		}
+		return results;
+	}
+
+	@Override
 	public TourPackage get(Long id) {
 		return tourPackageRepository.findById(id).orElseThrow(() -> new NotFoundException("Tour package not found"));
 	}
@@ -123,7 +139,7 @@ public class TourPackageServiceImpl implements TourPackageService {
 			logger.warn("No tour packages found with eligibility: " + parsed.name());
 			throw new NotFoundException("No tour packages found with eligibility: " + parsed.name());
 		}
-		logger.info("Tour package list: "+list);
+		logger.info("Tour package list: " + list);
 		return list;
 	}
 

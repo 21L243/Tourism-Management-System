@@ -6,12 +6,12 @@ import jakarta.validation.constraints.Size;
 
 public class UpdateProfileRequest {
 
-	@NotBlank(message = "Full name is required")
-	@Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
+	@NotBlank(message = "fullName is required")
+	@Size(min = 2, max = 100, message = "fullName must be between 2 and 100 characters")
 	private String fullName;
 
-	@NotBlank(message = "Email is required")
-	@Email(message = "Invalid email format")
+	@NotBlank(message = "email is required")
+	@Email
 	private String email;
 
 	@NotBlank(message = "Phone number is required")

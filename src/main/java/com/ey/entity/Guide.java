@@ -23,8 +23,8 @@ import jakarta.persistence.Table;
 public class Guide {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 7001)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence4")
+	@SequenceGenerator(name = "sequence4", sequenceName = "sequence4", allocationSize = 1, initialValue = 7001)
 	private Long id;
 	
 	private String fullName;

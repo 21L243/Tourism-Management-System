@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class FeedbackRequest {
-	@NotNull
+	@NotNull(message ="bookingId is required")
 	private Long bookingId;
-	@NotNull
+	@NotNull(message="accountId is required")
 	private Long accountId;
 	@Min(1)
 	@Max(5)
 	private int rating;
-	@NotBlank
+	@NotBlank(message="comments is required")
 	private String comments;
 	public Long getBookingId() {
 		return bookingId;
