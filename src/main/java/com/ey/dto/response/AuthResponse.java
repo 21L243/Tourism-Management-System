@@ -1,7 +1,7 @@
 package com.ey.dto.response;
 
 public class AuthResponse {
-	private String token;	
+	private String token;
 
 	public AuthResponse(String token) {
 		super();
@@ -15,6 +15,5 @@ public class AuthResponse {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
-	
+
 }

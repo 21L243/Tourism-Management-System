@@ -26,6 +26,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -36,7 +37,7 @@ public class Booking {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnoreProperties({"passwordHash", "role","createdAt","updatedAt","active"})
+	@JsonIgnoreProperties({ "passwordHash", "role", "createdAt", "updatedAt", "active" })
 	private Account account;
 
 	@ManyToOne(fetch = FetchType.LAZY)

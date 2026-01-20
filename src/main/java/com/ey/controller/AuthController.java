@@ -116,4 +116,9 @@ public class AuthController {
 		return ResponseEntity.ok(new MessageResponse("Account deactivated successfully"));
 	}
 
+	@PostMapping("/logout")
+	public ResponseEntity<MessageResponse> logout() {
+		return ResponseEntity.ok(new MessageResponse("Logged out successfully"));
+	}
+
 }

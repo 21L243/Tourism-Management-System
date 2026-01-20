@@ -45,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
 	private VoucherRepository voucherRepository;
 	@Autowired
 	private GuideRepository guideRepository;
-	
+
 	Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
 
 	@Override
@@ -89,15 +89,16 @@ public class BookingServiceImpl implements BookingService {
 		if (booking.getVouchers() == null) {
 			booking.setVouchers(new HashSet<Voucher>());
 		}
-        logger.info("Booking created successfuly");
+		logger.info("Booking created successfuly");
 		return bookingRepository.save(booking);
 	}
 
+	
 	@Override
 	public List<Booking> listByAccount(Long accountId) {
 		Account acc = accountRepository.findById(accountId)
 				.orElseThrow(() -> new NotFoundException("Account not found"));
-		logger.info("Accounts list: "+acc);
+		logger.info("Accounts list: " + acc);
 		return bookingRepository.findByAccount(acc);
 	}
 
@@ -120,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
 		t.setSpecialRequirements(req.getSpecialRequirements());
 
 		Traveller saved = travellerRepository.save(t);
-        logger.info("Traveller updated successfully");
+		logger.info("Traveller updated successfully");
 		return saved;
 	}
 

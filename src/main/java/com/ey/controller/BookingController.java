@@ -65,6 +65,7 @@ public class BookingController {
 		return ResponseEntity.ok("Applied voucher");
 	}
 
+	
 	@PutMapping("/{bookingId}/guide/{guideId}")
 	public ResponseEntity<?> assignGuide(@PathVariable Long bookingId, @PathVariable Long guideId) {
 		bookingService.assignGuide(bookingId, guideId);

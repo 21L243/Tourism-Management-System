@@ -25,8 +25,10 @@ public class SecurityConfig {
 
 	private final JWTUtil jwtUtil;
 
+
 	public SecurityConfig(JWTUtil jwtUtil) {
 		this.jwtUtil = jwtUtil;
+		
 	}
 
 	@Bean
@@ -62,8 +64,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(
 						auth -> auth.requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
 								.requestMatchers("/api/v1/auth/forgot-password", "/api/v1/auth/reset-password")
-								.permitAll()
-								.requestMatchers(HttpMethod.GET, "/api/v1/destinations/**").permitAll()
+								.permitAll().requestMatchers(HttpMethod.GET, "/api/v1/destinations/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/packages/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/trip-plans/**").permitAll()
 								.requestMatchers(HttpMethod.GET, "/api/v1/guides/**").permitAll()
@@ -82,6 +83,7 @@ public class SecurityConfig {
 								.hasRole("ADMIN").anyRequest().authenticated())
 				.formLogin(form -> form.disable())
 				.addFilterAt(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
 				.addFilterBefore(new JWTAuthorizationFilter(jwtUtil, userDetailsService),
 						UsernamePasswordAuthenticationFilter.class);
 

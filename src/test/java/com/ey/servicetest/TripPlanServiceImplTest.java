@@ -3,15 +3,11 @@ package com.ey.servicetest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.ey.dto.request.TripPlanRequest;
 import com.ey.entity.TourPackage;
@@ -21,48 +17,60 @@ import com.ey.repository.TourPackageRepository;
 import com.ey.repository.TripPlanRepository;
 import com.ey.service.TripPlanServiceImpl;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
+@Transactional 
 class TripPlanServiceImplTest {
 
-	@Autowired
-	private TripPlanServiceImpl tripPlanService;
+    @Autowired
+    private TripPlanServiceImpl tripPlanService;
 
-	@MockBean
-	private TripPlanRepository tripPlanRepository;
+    @Autowired
+    private TripPlanRepository tripPlanRepository;
 
-	@MockBean
-	private TourPackageRepository tourPackageRepository;
+    @Autowired
+    private TourPackageRepository tourPackageRepository;
 
-	@Test
-	void addToPackage_success() {
-		Long packageId = 1L;
+    private Long packageId;
 
-		TourPackage tp = new TourPackage();
-		tp.setId(packageId);
+    @BeforeEach
+    void setUp() {
+        
+        TourPackage tp = new TourPackage();
+        tp.setTitle("Test Package");    
+        tp.setBasePrice(500.0);         
+        tp = tourPackageRepository.save(tp);
+        packageId = tp.getId();
+    }
 
-		TripPlanRequest req = new TripPlanRequest();
-		req.setDayNumber(1);
-		req.setTitle("Day 1");
-		req.setDescription("Arrival");
+    @Test
+    void addToPackage_success() {
+        TripPlanRequest req = new TripPlanRequest();
+        req.setDayNumber(1);
+        req.setTitle("Day 1");
+        req.setDescription("Arrival");
 
-		when(tourPackageRepository.findById(packageId)).thenReturn(Optional.of(tp));
-		when(tripPlanRepository.save(any(TripPlan.class))).thenAnswer(i -> i.getArgument(0));
+        TripPlan saved = tripPlanService.addToPackage(packageId, req);
 
-		TripPlan saved = tripPlanService.addToPackage(packageId, req);
+        assertNotNull(saved);
+        assertEquals("Day 1", saved.getTitle());
+        assertEquals(1, saved.getDayNumber());
+        assertEquals("Arrival", saved.getDescription());
+        assertNotNull(saved.getTourPackage());
+        assertEquals(packageId, saved.getTourPackage().getId());
 
-		assertNotNull(saved);
-		assertEquals("Day 1", saved.getTitle());
-		assertEquals(tp, saved.getTourPackage());
-	}
+       
+        TripPlan fromDb = tripPlanRepository.findById(saved.getId())
+            .orElseThrow(() -> new AssertionError("TripPlan not persisted"));
+        assertEquals("Day 1", fromDb.getTitle());
+        assertEquals(packageId, fromDb.getTourPackage().getId());
+    }
 
-	
-	@Test
-	void getById_failure_notFound() {
-		Long packageId = 1L;
-		Long planId = 99L;
-
-		when(tripPlanRepository.findById(planId)).thenReturn(Optional.empty());
-
-		assertThrows(NotFoundException.class, () -> tripPlanService.getById(packageId, planId));
-	}
+    @Test
+    void getById_failure_notFound() {
+        Long nonExistingPlanId = 99_999L;
+        assertThrows(NotFoundException.class,
+            () -> tripPlanService.getById(packageId, nonExistingPlanId));
+    }
 }

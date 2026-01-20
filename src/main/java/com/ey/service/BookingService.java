@@ -29,4 +29,5 @@ public interface BookingService {
 
 	Booking assignGuide(Long bookingId, Long guideId);
 
+
 }

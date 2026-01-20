@@ -19,4 +19,5 @@ public interface AuthService {
 	MessageResponse forgotPassword(ForgotPasswordRequest req);
 
 	MessageResponse resetPassword(ResetPasswordRequest req);
+
 }

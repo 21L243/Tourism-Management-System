@@ -139,4 +139,6 @@ public class AuthServiceImpl implements AuthService {
 
 		return new MessageResponse("Password has been reset successfully");
 	}
+
+	
 }
